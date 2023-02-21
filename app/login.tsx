@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, SafeAreaView, TextInput } from 'react-native';
 import { useState, useEffect } from "react";
 
 //* Components imports
-import StyledInput from './src/components/common/StyledInput/StyledInput';
+import StyledInput from '../src/components/common/StyledInput/StyledInput';
 
 export default function App() {
   const [userCredentials, setUserCredentials] = useState({
