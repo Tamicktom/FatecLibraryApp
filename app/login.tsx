@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 //* Components imports
 import StyledInput from '../src/components/common/StyledInput/StyledInput';
 
-export default function App() {
+export default function Login() {
   const [userCredentials, setUserCredentials] = useState({
     email: "", password: ""
   });

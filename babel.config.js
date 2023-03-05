@@ -5,6 +5,28 @@ module.exports = function (api) {
     plugins: [
       "nativewind/babel",
       require.resolve("expo-router/babel"),
+      [
+        "module-resolver",
+        {
+          root: ["."],
+          extensions: [
+            '.ios.ts',
+            '.android.ts',
+            '.ts',
+            '.ios.tsx',
+            '.android.tsx',
+            '.tsx',
+            '.jsx',
+            '.js',
+            '.json',
+          ],
+          alias: {
+            "@components": "./src/components",
+            "@hooks": "./src/hooks",
+            "@localTypes": "./src/localTypes",
+          }
+        }
+      ]
     ],
   };
 };
