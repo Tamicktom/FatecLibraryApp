@@ -6,6 +6,9 @@
       "@components/*": ["./src/components/*"],
       "@hooks/*": ["./src/hooks/*"],
       "@localTypes/*": ["src/localTypes/*"],
+      "@styles/*": ["src/styles/*"],
+      "@assets/*": ["src/assets/*"],
+      "@services/*": ["src/services/*"],
     }
   },
   "extends": "expo/tsconfig.base"

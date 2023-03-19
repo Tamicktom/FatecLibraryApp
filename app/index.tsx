@@ -19,7 +19,7 @@ export default function App() {
         <View className='flex flex-col items-center justify-center w-full'>
           <StyledButton to='/login'>Login</StyledButton>
           <StyledButton to='/help'>Help</StyledButton>
-          <StyledButton to='/pokemon/1'>Pokémon 1</StyledButton>
+          <StyledButton to='/search'>Buscar Pokémon</StyledButton>
         </View>
 
       </View>

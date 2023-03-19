@@ -1,47 +1,44 @@
-//* Libraries imports
-import { useEffect, useState } from "react";
-
-//* Type import
+// usePokemon.ts
+import { useState, useEffect } from "react";
 import type { Pokemon } from "@localTypes/Pokemon";
+import useDebouncer from "@hooks/common/useDebouncer";
 
-/**
- * sgihsigsdhgjksd dsugdfbgdug
- * @param id
- */
-
-export default function usePokemon(id: number) {
-  const [loading, setLoading] = useState(true);
-  const [pokemon, setPokemon] = useState<null | Pokemon>(null);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    setLoading(true);
-    fetchPokemon(id)
-      .then((pokemon) => {
-        setPokemon(pokemon);
-        setLoading(false);
-      })
-      .catch((error) => {
-        setError(error);
-        setLoading(false);
-      });
-  }, []);
-
-  useEffect(() => {
-    console.log("Pokemon changed", pokemon);
-  }, [pokemon]);
-
-  return { loading, pokemon, error };
-}
-
-/**
- * Get Pokémon by id from PokeAPI
- * @param id
- * @returns {Promise<Pokemon>}
- */
-
-async function fetchPokemon(id: number) {
-  const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+async function fetchPokemon(name: string): Promise<Pokemon> {
+  const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
   const data = await response.json();
   return data as Pokemon;
+}
+
+export default function usePokemon(name: string) {
+  const debouncedName = useDebouncer(name, 500);
+  const [loading, setLoading] = useState(true);
+  const [pokemon, setPokemon] = useState<Pokemon | null>(null);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    if (!debouncedName) {
+      setLoading(false);
+      setPokemon(null);
+      setError(null);
+      return;
+    }
+
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const fetchedPokemon = await fetchPokemon(debouncedName);
+        setPokemon(fetchedPokemon);
+      } catch (err) {
+        setError(err as Error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [debouncedName]);
+
+  return { loading, pokemon, error };
 }

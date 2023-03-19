@@ -1,0 +1,98 @@
+[
+    {
+        "merged": "com.pokedex.app-merged_res-33:/drawable-hdpi_splashscreen_image.png.flat",
+        "source": "com.pokedex.app-main-35:/drawable-hdpi/splashscreen_image.png"
+    },
+    {
+        "merged": "com.pokedex.app-merged_res-33:/mipmap-mdpi_ic_launcher_round.png.flat",
+        "source": "com.pokedex.app-main-35:/mipmap-mdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.pokedex.app-merged_res-33:/mipmap-xxxhdpi_ic_launcher_round.png.flat",
+        "source": "com.pokedex.app-main-35:/mipmap-xxxhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.pokedex.app-merged_res-33:/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "com.pokedex.app-main-35:/mipmap-hdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.pokedex.app-merged_res-33:/mipmap-xxhdpi_ic_launcher_foreground.png.flat",
+        "source": "com.pokedex.app-main-35:/mipmap-xxhdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "com.pokedex.app-merged_res-33:/drawable_rn_edit_text_material.xml.flat",
+        "source": "com.pokedex.app-main-35:/drawable/rn_edit_text_material.xml"
+    },
+    {
+        "merged": "com.pokedex.app-merged_res-33:/drawable-mdpi_splashscreen_image.png.flat",
+        "source": "com.pokedex.app-main-35:/drawable-mdpi/splashscreen_image.png"
+    },
+    {
+        "merged": "com.pokedex.app-merged_res-33:/mipmap-hdpi_ic_launcher_round.png.flat",
+        "source": "com.pokedex.app-main-35:/mipmap-hdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.pokedex.app-merged_res-33:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.pokedex.app-main-35:/mipmap-anydpi-v26/ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.pokedex.app-merged_res-33:/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "com.pokedex.app-main-35:/mipmap-xxxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.pokedex.app-merged_res-33:/mipmap-xhdpi_ic_launcher_foreground.png.flat",
+        "source": "com.pokedex.app-main-35:/mipmap-xhdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "com.pokedex.app-merged_res-33:/mipmap-hdpi_ic_launcher_foreground.png.flat",
+        "source": "com.pokedex.app-main-35:/mipmap-hdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "com.pokedex.app-merged_res-33:/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "com.pokedex.app-main-35:/mipmap-mdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.pokedex.app-merged_res-33:/mipmap-xhdpi_ic_launcher_round.png.flat",
+        "source": "com.pokedex.app-main-35:/mipmap-xhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.pokedex.app-merged_res-33:/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "com.pokedex.app-main-35:/mipmap-xhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.pokedex.app-merged_res-33:/mipmap-xxhdpi_ic_launcher_round.png.flat",
+        "source": "com.pokedex.app-main-35:/mipmap-xxhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.pokedex.app-merged_res-33:/drawable_splashscreen.xml.flat",
+        "source": "com.pokedex.app-main-35:/drawable/splashscreen.xml"
+    },
+    {
+        "merged": "com.pokedex.app-merged_res-33:/drawable-xxxhdpi_splashscreen_image.png.flat",
+        "source": "com.pokedex.app-main-35:/drawable-xxxhdpi/splashscreen_image.png"
+    },
+    {
+        "merged": "com.pokedex.app-merged_res-33:/mipmap-mdpi_ic_launcher_foreground.png.flat",
+        "source": "com.pokedex.app-main-35:/mipmap-mdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "com.pokedex.app-merged_res-33:/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "com.pokedex.app-main-35:/mipmap-xxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.pokedex.app-merged_res-33:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.pokedex.app-main-35:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "com.pokedex.app-merged_res-33:/mipmap-xxxhdpi_ic_launcher_foreground.png.flat",
+        "source": "com.pokedex.app-main-35:/mipmap-xxxhdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "com.pokedex.app-merged_res-33:/drawable-xhdpi_splashscreen_image.png.flat",
+        "source": "com.pokedex.app-main-35:/drawable-xhdpi/splashscreen_image.png"
+    },
+    {
+        "merged": "com.pokedex.app-merged_res-33:/drawable-xxhdpi_splashscreen_image.png.flat",
+        "source": "com.pokedex.app-main-35:/drawable-xxhdpi/splashscreen_image.png"
+    }
+]

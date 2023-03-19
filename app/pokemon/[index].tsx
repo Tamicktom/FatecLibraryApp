@@ -8,9 +8,9 @@ import usePokemon from '@hooks/common/usePokemon';
 type Props = {}
 
 const Pokemon = (props: Props) => {
-  const pokemonId = Number(usePathname().replace('/pokemon/', ''));
+  const pokemonId = usePathname().replace('/pokemon/', '');
 
-  const {pokemon, error, loading} = usePokemon(pokemonId);
+  const { pokemon, error, loading } = usePokemon(pokemonId);
 
   return (
     <View className='flex items-center justify-center flex-1'>

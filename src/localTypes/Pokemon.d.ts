@@ -1,5 +1,25 @@
 import { Sprites } from "./Sprites";
 
+export type PkmType =
+  | "normal"
+  | "fire"
+  | "water"
+  | "electric"
+  | "grass"
+  | "ice"
+  | "fighting"
+  | "poison"
+  | "ground"
+  | "flying"
+  | "psychic"
+  | "bug"
+  | "rock"
+  | "ghost"
+  | "dragon"
+  | "dark"
+  | "steel"
+  | "fairy";
+
 export type Pokemon = {
   abilities: [];
   base_experience: number;
@@ -17,6 +37,14 @@ export type Pokemon = {
   species: {};
   sprites: Sprites;
   stats: [];
-  types: [];
+  types: [
+    {
+      slot: number;
+      type: {
+        name: PkmType;
+        url: string;
+      };
+    }
+  ];
   weight: number;
 };

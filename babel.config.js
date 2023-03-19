@@ -24,6 +24,9 @@ module.exports = function (api) {
             "@components": "./src/components",
             "@hooks": "./src/hooks",
             "@localTypes": "./src/localTypes",
+            "@styles": "./src/styles",
+            "@assets": "./src/assets",
+            "@services": "./src/services",
           }
         }
       ]
