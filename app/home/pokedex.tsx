@@ -1,43 +1,38 @@
-//* Libraries imports
 import { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { View, SafeAreaView, Text, FlatList } from 'react-native';
+import { View, SafeAreaView, FlatList } from 'react-native';
 
-//* Components imports
 import PkmCard from "@components/specific/PkmCard/PkmCard";
 import SearchInput from "@components/common/SearchInput/SearchInput";
 
-//* Hooks imports
-import { usePokedex, type PokemonBasicInfo } from '@hooks/common/usePokedex';
+import { usePokedex, PokemonBasicInfo } from '@hooks/common/usePokedex';
 
 export default function Search() {
-  const [page, setPage] = useState(1);
   const [query, setQuery] = useState("");
   const [pokemons, setPokemons] = useState<PokemonBasicInfo[]>([]);
-  const { data, loading, error } = usePokedex(page);
+  const [allPokemons, setAllPokemons] = useState<PokemonBasicInfo[]>([]);
+  const { data, loading, error, fetchNextPage, hasNextPage } = usePokedex(1);
 
   useEffect(() => {
-    //filter by query
-    //if query is empty, show all pokemons
-    if (data && data.results) {
-      if (query === "") {
-        setPokemons(data.results);
-      } else {
-        setPokemons(data.results.filter((pkm) => pkm.name.includes(query.toLowerCase())));
-      }
+    if (data) {
+      const allPagesResults = data.pages.flatMap(page => page.results);
+      setAllPokemons(allPagesResults);
     }
   }, [data]);
 
   useEffect(() => {
-    //if query is empty, show all pokemons
-    if (data && data.results) {
-      if (query === "") {
-        setPokemons(data.results);
-      } else {
-        setPokemons(data.results.filter((pkm) => pkm.name.includes(query.toLowerCase())));
-      }
+    if (query === "") {
+      setPokemons(allPokemons);
+    } else {
+      setPokemons(allPokemons.filter(pkm => pkm.name.includes(query.toLowerCase())));
     }
-  }, [query]);
+  }, [query, allPokemons]);
+
+  const handleEndReached = () => {
+    if (hasNextPage) {
+      fetchNextPage();
+    }
+  };
 
   return (
     <SafeAreaView className="flex-1">
@@ -51,7 +46,7 @@ export default function Search() {
         </View>
 
         {
-          data && data.results && data.results.length > 0 && pokemons.length > 0 &&
+          pokemons.length > 0 &&
           <View className='flex flex-col justify-start w-full'>
             <FlatList
               data={pokemons}
@@ -59,7 +54,7 @@ export default function Search() {
               renderItem={({ item }) => (
                 <PkmCard name={item.name} />
               )}
-              onEndReached={() => setPage(page + 1)}
+              onEndReached={handleEndReached}
               onEndReachedThreshold={0.3}
               contentContainerStyle={{
                 paddingTop: 120,

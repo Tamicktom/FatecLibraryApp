@@ -1,5 +1,4 @@
-// usePokedex.ts
-import { useState, useEffect } from "react";
+import { useInfiniteQuery } from "react-query";
 
 export interface PokemonBasicInfo {
   name: string;
@@ -24,36 +23,31 @@ const fetchPokedex = async (page: number): Promise<PokedexResponse> => {
 };
 
 export const usePokedex = (page: number) => {
-  const [loading, setLoading] = useState(true);
-  const [data, setData] = useState<PokedexResponse | null>(null);
-  const [error, setError] = useState<Error | null>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      setError(null);
-
-      try {
-        const fetchedData = await fetchPokedex(page);
-        if (data) {
-          const newResults = [...data.results, ...fetchedData.results];
-          const uniqueResults = newResults.filter(
-            (result, index, array) =>
-              array.findIndex((r) => r.name === result.name) === index
-          );
-          setData({ ...fetchedData, results: uniqueResults });
-        } else {
-          setData(fetchedData);
+  const {
+    data,
+    isLoading: loading,
+    error,
+    hasNextPage,
+    fetchNextPage,
+  } = useInfiniteQuery<PokedexResponse, Error>(
+    "pokedex",
+    ({ pageParam = 1 }) => fetchPokedex(pageParam),
+    {
+      getNextPageParam: (lastPage) => {
+        if (lastPage.next) {
+          const nextPage = lastPage.next.match(/offset=(\d+)/);
+          if (nextPage) {
+            const offset = parseInt(nextPage[1], 10);
+            return offset / 50 + 1;
+          }
         }
-      } catch (err) {
-        setError(err as Error);
-      } finally {
-        setLoading(false);
-      }
-    };
+        return undefined;
+      },
+      staleTime: Infinity,
+      refetchOnWindowFocus: false,
+      retry: false,
+    }
+  );
 
-    fetchData();
-  }, [page]);
-
-  return { loading, data, error };
+  return { loading, data, error, hasNextPage, fetchNextPage };
 };

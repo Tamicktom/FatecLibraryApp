@@ -27,6 +27,7 @@ module.exports = function (api) {
             "@styles": "./src/styles",
             "@assets": "./src/assets",
             "@services": "./src/services",
+            "@store": "./src/store",
           }
         }
       ]
