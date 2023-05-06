@@ -16,4 +16,26 @@ export const userStore = createStore<UserStore>((set) => ({
     email: "",
     isLogedIn: false,
   },
+  actions: {
+    login: (userData: { id: string; name: string; email: string }) => {
+      set((state) => ({
+        user: {
+          ...state.user,
+          ...userData,
+          isLogedIn: true,
+        },
+      }));
+    },
+    logout: () => {
+      set((state) => ({
+        user: {
+          ...state.user,
+          id: "",
+          name: "",
+          email: "",
+          isLogedIn: false,
+        },
+      }));
+    },
+  },
 }));

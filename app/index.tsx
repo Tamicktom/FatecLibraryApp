@@ -87,11 +87,17 @@ export default function Login(props: Props) {
         <StatusBar style="auto" />
 
         <TouchableOpacity
-          className='w-5/6 bg-white flex justify-center items-center px-4 py-4 rounded-2xl mt-4'
+          className='flex items-center justify-center w-5/6 px-4 py-4 mt-4 bg-white rounded-2xl'
           onPress={handleLogin}
         >
           <Text>
             {type === "login" ? "Entrar" : "Cadastrar"}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity>
+          <Text>
+            Não tem uma conta? Cadastre-se
           </Text>
         </TouchableOpacity>
       </View>

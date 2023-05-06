@@ -1,5 +1,4 @@
 //* Libraries imports
-import { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 
@@ -13,20 +12,9 @@ type Props = {
   name: string;
 }
 
-const imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/";
-
 export default function PkmCard(props: Props) {
   const router = useRouter();
-  const [bgColor, setBgColor] = useState("#FFF");
-  //put the first letter of the pokemon name in uppercase
-  const [pkmName, setPkmName] = useState(props.name.charAt(0).toUpperCase() + props.name.slice(1));
-  const { pokemon, loading, error } = usePokemon(props.name);
-
-  useEffect(() => {
-    if (pokemon?.types?.[0]?.type?.name) {
-      setBgColor(pkmTypeColors[pokemon?.types?.[0]?.type?.name].light);
-    }
-  }, [pokemon, loading, error]);
+  const { pokemon } = usePokemon(props.name);
 
   return (
     <TouchableOpacity
@@ -37,12 +25,14 @@ export default function PkmCard(props: Props) {
       <View
         className='flex flex-col justify-between w-full h-20 py-1 pl-36 rounded-2xl'
         style={{
-          backgroundColor: bgColor,
+          backgroundColor: pokemon && pkmTypeColors[pokemon.types[0].type.name].light || "#fff",
         }}
       >
         <View>
           <Text className='text-base text-gray-700'>Nº {pokemon?.id || ""}</Text>
-          <Text className='text-2xl font-bold mt-[-4px] text-gray-800'>{pkmName}</Text>
+          <Text className='text-2xl font-bold mt-[-4px] text-gray-800'>
+            {pokemon?.name?.charAt(0).toUpperCase() + pokemon?.name?.slice(1) || ""}
+          </Text>
         </View>
         <View className='flex flex-row'>
           {

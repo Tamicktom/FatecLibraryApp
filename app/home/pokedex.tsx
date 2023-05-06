@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { View, SafeAreaView, FlatList } from 'react-native';
+import { View, SafeAreaView } from 'react-native';
+import { FlashList } from "@shopify/flash-list";
 
 import PkmCard from "@components/specific/PkmCard/PkmCard";
 import SearchInput from "@components/common/SearchInput/SearchInput";
@@ -47,10 +48,9 @@ export default function Search() {
 
         {
           pokemons.length > 0 &&
-          <View className='flex flex-col justify-start w-full'>
-            <FlatList
+          <View className='flex flex-col justify-start w-full min-h-full'>
+            <FlashList
               data={pokemons}
-              keyExtractor={(item) => item.name}
               renderItem={({ item }) => (
                 <PkmCard name={item.name} />
               )}
@@ -60,6 +60,7 @@ export default function Search() {
                 paddingTop: 120,
                 paddingBottom: 120,
               }}
+              estimatedItemSize={107}
             />
           </View>
         }

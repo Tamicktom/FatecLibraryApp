@@ -18,7 +18,8 @@ export default function usePokemon(name: string) {
       enabled: !!debouncedName, // Disables query if debouncedName is empty
       retry: false,
       refetchOnWindowFocus: false,
-      staleTime: Infinity,
+      staleTime: 1000 * 60 * 60 * 24, // 24 hours
+      cacheTime: 1000 * 60 * 60 * 24, // 24 hours
     }
   );
 

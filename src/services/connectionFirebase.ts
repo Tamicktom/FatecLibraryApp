@@ -2,11 +2,14 @@
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
+import "firebase/compat/database";
+
+import type { FirebaseOptions } from "firebase/app";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
-const firebaseConfig = {
+const firebaseConfig: FirebaseOptions = {
   apiKey: "AIzaSyDIXbAQsPo7lLo1zTAxEN0Wd0e2yBszL4o",
   authDomain: "pokedex-4ebd4.firebaseapp.com",
   databaseURL: "https://pokedex-4ebd4-default-rtdb.firebaseio.com",

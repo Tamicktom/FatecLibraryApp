@@ -43,7 +43,8 @@ export const usePokedex = (page: number) => {
         }
         return undefined;
       },
-      staleTime: Infinity,
+      staleTime: 1000 * 60 * 60 * 24, // 24 hours
+      cacheTime: 1000 * 60 * 60 * 24, // 24 hours
       refetchOnWindowFocus: false,
       retry: false,
     }
