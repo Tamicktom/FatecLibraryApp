@@ -1,7 +1,7 @@
 //* Libraries imports
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, SafeAreaView, TextInput, TouchableOpacity } from 'react-native';
-import { useState, useEffect } from "react";
+import { Text, View, SafeAreaView, TouchableOpacity } from 'react-native';
+import { useState } from "react";
 import { useRouter } from 'expo-router';
 
 //* Components imports
@@ -20,7 +20,7 @@ type Props = {
 export default function Login(props: Props) {
   const [type, setType] = useState<"login" | "register">("login");
   const [userCredentials, setUserCredentials] = useState({
-    email: "", password: ""
+    email: "", password: "", name: ""
   });
 
   const router = useRouter();
@@ -28,16 +28,17 @@ export default function Login(props: Props) {
   function handleLogin() {
     if (type === 'login') {
       // Aqui fazemos o login
-      const user = firebase.auth().signInWithEmailAndPassword(userCredentials.email, userCredentials.password)
+      firebase.auth().signInWithEmailAndPassword(userCredentials.email, userCredentials.password)
         .then((user) => {
           // props.changeStatus(user.user.uid)
-          console.log("Logado com sucesso!");
-          console.log(user);
+          if (!user) return;
+          if (!user.user) return;
+          // add user to store
           userStore.setState({
             user: {
               id: user.user.uid,
-              email: user.user.email,
-              name: user.user.displayName,
+              email: user.user.email || "",
+              name: user.user.displayName || "",
               isLogedIn: true
             }
           });
@@ -50,7 +51,7 @@ export default function Login(props: Props) {
         })
     } else {
       // Aqui cadastramos o usuario 
-      const user = firebase.auth().createUserWithEmailAndPassword(userCredentials.email, userCredentials.password)
+      firebase.auth().createUserWithEmailAndPassword(userCredentials.email, userCredentials.password)
         .then((user) => {
           // props.changeStatus(user.user.uid);
           console.log("Cadastrado com sucesso!");
@@ -62,10 +63,6 @@ export default function Login(props: Props) {
         })
     }
   }
-
-  useEffect(() => {
-    console.log(userCredentials);
-  }, [userCredentials])
 
   // if the user is already logged in, redirect to home
   if (userStore.getState().user.isLogedIn) {
