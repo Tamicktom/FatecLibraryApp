@@ -14,7 +14,6 @@ export default function Layout() {
 
   userStore.subscribe((state) => {
     setIsLogedIn(state.user.isLogedIn);
-    console.log(state.user.isLogedIn);
   });
 
   const options = {
@@ -42,6 +41,12 @@ export default function Layout() {
             ...options,
             tabBarIcon: ({ focused }) => renderIcon(focused, "index")
           }} />
+        <Tabs.Screen
+          name="MyPkmList"
+          options={{
+            ...options,
+            tabBarIcon: ({ focused }) => renderIcon(focused, "index")
+          }} />
         {/* <Tabs.Screen
           name="favorites"
           options={{
@@ -65,7 +70,7 @@ export default function Layout() {
   );
 }
 
-type Routes = "pokedex" | "index" | "favorites" | "options" | "GerenciarProdutos";
+type Routes = "pokedex" | "index" | "favorites" | "options" | "GerenciarProdutos" | "MyPkmList";
 
 function renderIcon(focused: boolean, route: Routes) {
   switch (route) {
@@ -78,6 +83,8 @@ function renderIcon(focused: boolean, route: Routes) {
     case "options":
       return <Heart color={focused ? "black" : "gray"} />;
     case "GerenciarProdutos":
+      return <Heart color={focused ? "black" : "gray"} />;
+    case "MyPkmList":
       return <Heart color={focused ? "black" : "gray"} />;
     default:
       return <Heart color={focused ? "black" : "gray"} />;
