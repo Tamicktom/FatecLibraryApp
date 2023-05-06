@@ -2,7 +2,7 @@ import { createStore } from "zustand";
 
 import type { Pokemon } from "@localTypes/Pokemon";
 
-type PokemonStore = {
+export type PokemonStore = {
   pokemons: Pokemon[];
   addPokemon: (pokemon: Pokemon) => void;
   removePokemon: (pokemon: Pokemon) => void;

@@ -1,14 +1,29 @@
+//* Libraries imports
+import { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { View, SafeAreaView, FlatList } from 'react-native';
 
 import PkmCard from "@components/specific/PkmCard/PkmCard";
 
 //* Store
-import useFavoritesPokemonsStore from '@store/favoritesPokemons';
+import PokemonsStore, { type PokemonStore } from '@store/favoritesPokemons';
+
+//* Types
+import type { Pokemon } from '@localTypes/Pokemon';
 
 
 export default function Search() {
-  const favoritesPokemons = useFavoritesPokemonsStore.getState().pokemons;
+  const [favoritesPokemons, setFavoritesPokemons] = useState<Pokemon[]>([]);
+
+  useEffect(() => {
+    const unsubscribe = PokemonsStore.subscribe(
+      (state: PokemonStore) => {
+        setFavoritesPokemons(state.pokemons);
+      },
+    );
+
+    return () => unsubscribe();
+  }, []);
 
   return (
     <SafeAreaView className="flex-1">

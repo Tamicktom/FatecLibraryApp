@@ -35,63 +35,69 @@ export default function Pokemon(props: Props) {
   }, [pokemon]);
 
   return (
-    <View
-      className='flex items-center justify-start flex-1 pt-16'
-      style={{ backgroundColor: pkmTypeColors[pokemon?.types[0]?.type?.name]?.color || '#fff' }}
-    >
-      <View className='flex flex-col w-full'>
-        <View className='flex flex-row justify-between w-full px-8'>
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
+    <>
+      {
+        pokemon && (
+          <View
+            className='flex items-center justify-start flex-1 pt-16'
+            style={{ backgroundColor: pkmTypeColors[pokemon?.types[0]?.type?.name]?.color || '#fff' }}
           >
-            <ArrowLeft color="white" size={32} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              //verify if pokemon is already in favorites
-              const isFavorite = useFavoritesPokemonsStore.getState().pokemons.find(p => p.id === pokemon?.id);
-              //if is not in favorites, add it
-              if (!isFavorite) {
-                useFavoritesPokemonsStore.getState().addPokemon(pokemon);
-                setIsFavorited(true);
-              } else {
-                //if is in favorites, remove it
-                useFavoritesPokemonsStore.getState().removePokemon(pokemon);
-                setIsFavorited(false);
-              }
-            }}
-          >
-            <Heart
-              color="white"
-              size={32}
-              weight={isFavorited ? 'fill' : 'duotone'}
-            />
-          </TouchableOpacity>
-        </View>
-        <View className='flex flex-row justify-between w-full px-8 mt-8'>
-          <Text className='text-4xl font-black text-white'>{pokemon?.name.substring(0, 1).toUpperCase() + pokemon?.name.substring(1)}</Text>
-          <Text className='text-2xl font-bold text-white'>#{pokemon?.id}</Text>
-        </View>
-        <View className='flex flex-row items-start justify-start w-full px-8'>
-          {
-            pokemon?.types.map((type, index) => (
-              <PkmTypeCard key={index} type={type.type.name} />
-            ))
-          }
-        </View>
-      </View>
+            <View className='flex flex-col w-full'>
+              <View className='flex flex-row justify-between w-full px-8'>
+                <TouchableOpacity
+                  onPress={() => navigation.goBack()}
+                >
+                  <ArrowLeft color="white" size={32} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    //verify if pokemon is already in favorites
+                    const isFavorite = useFavoritesPokemonsStore.getState().pokemons.find(p => p.id === pokemon?.id);
+                    //if is not in favorites, add it
+                    if (!isFavorite) {
+                      useFavoritesPokemonsStore.getState().addPokemon(pokemon);
+                      setIsFavorited(true);
+                    } else {
+                      //if is in favorites, remove it
+                      useFavoritesPokemonsStore.getState().removePokemon(pokemon);
+                      setIsFavorited(false);
+                    }
+                  }}
+                >
+                  <Heart
+                    color="white"
+                    size={32}
+                    weight={isFavorited ? 'fill' : 'duotone'}
+                  />
+                </TouchableOpacity>
+              </View>
+              <View className='flex flex-row justify-between w-full px-8 mt-8'>
+                <Text className='text-4xl font-black text-white'>{pokemon?.name.substring(0, 1).toUpperCase() + pokemon?.name.substring(1)}</Text>
+                <Text className='text-2xl font-bold text-white'>#{pokemon?.id}</Text>
+              </View>
+              <View className='flex flex-row items-start justify-start w-full px-8'>
+                {
+                  pokemon?.types.map((type, index) => (
+                    <PkmTypeCard key={index} type={type.type.name} />
+                  ))
+                }
+              </View>
+            </View>
 
-      <View className='z-10'>
-        <Image
-          className='w-72 h-72 rounded-2xl'
-          source={{ uri: pokemon?.sprites?.other?.['official-artwork']?.front_default }}
-        />
-      </View>
+            <View className='z-10'>
+              <Image
+                className='w-72 h-72 rounded-2xl'
+                source={{ uri: pokemon?.sprites?.other?.['official-artwork']?.front_default || "" }}
+              />
+            </View>
 
-      <View className='w-full h-full bg-white rounded-3xl mt-[-60px]'>
+            <View className='w-full h-full bg-white rounded-3xl mt-[-60px]'>
 
-      </View>
-    </View>
+            </View>
+          </View>
+        )
+      }
+    </>
   )
 }
 
