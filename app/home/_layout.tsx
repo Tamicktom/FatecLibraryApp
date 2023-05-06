@@ -34,33 +34,52 @@ export default function Layout() {
           name="pokedex"
           options={{
             ...options,
-            tabBarIcon: () => <MagnifyingGlass />,
+            tabBarIcon: ({ focused }) => renderIcon(focused, "pokedex")
           }} />
         <Tabs.Screen
           name="index"
           options={{
             ...options,
-            tabBarIcon: () => <House />,
+            tabBarIcon: ({ focused }) => renderIcon(focused, "index")
           }} />
-        <Tabs.Screen
+        {/* <Tabs.Screen
           name="favorites"
           options={{
             ...options,
             tabBarIcon: () => <Heart />,
-          }} />
+          }} /> */}
         <Tabs.Screen
           name="options"
           options={{
             ...options,
-            tabBarIcon: () => <Heart />,
+            tabBarIcon: ({ focused }) => renderIcon(focused, "options"),
           }} />
-        <Tabs.Screen
+        {/* <Tabs.Screen
           name="GerenciarProdutos"
           options={{
             ...options,
             tabBarIcon: () => <Heart />,
-          }} />
+          }} /> */}
       </Tabs>
     </SafeAreaProvider>
   );
+}
+
+type Routes = "pokedex" | "index" | "favorites" | "options" | "GerenciarProdutos";
+
+function renderIcon(focused: boolean, route: Routes) {
+  switch (route) {
+    case "pokedex":
+      return <MagnifyingGlass color={focused ? "black" : "gray"} />;
+    case "index":
+      return <House color={focused ? "black" : "gray"} />;
+    case "favorites":
+      return <Heart color={focused ? "black" : "gray"} />;
+    case "options":
+      return <Heart color={focused ? "black" : "gray"} />;
+    case "GerenciarProdutos":
+      return <Heart color={focused ? "black" : "gray"} />;
+    default:
+      return <Heart color={focused ? "black" : "gray"} />;
+  }
 }
