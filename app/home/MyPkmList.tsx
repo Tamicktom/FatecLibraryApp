@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Text, SafeAreaView, TextInput, TouchableOpacity, Keyboard, View, Modal, FlatList } from 'react-native';
 import firebase from '@services/connectionFirebase';
 import { useRouter } from 'expo-router';
-import { Trash } from "phosphor-react-native";
+import { Trash, Pen, Check, X } from "phosphor-react-native";
 
 //* Utils imports
 import uuid from '@utils/uuid';
@@ -17,7 +17,21 @@ type Pokemon = {
 export default function MyPkmList() {
   const router = useRouter();
   const [isListUpdated, setIsListUpdated] = useState(false);
-  const [modalVisible, setModalVisible] = useState(true);
+  const [addPokemonModalVisible, setAddPokemonModalVisible] = useState(true);
+  const [deletePokemonDialogVisible, setDeletePokemonDialogVisible] = useState(false);
+  const [pokemonToDelete, setPokemonToDelete] = useState<Pokemon | null>(null);
+  const [editPokemonModalVisible, setEditPokemonModalVisible] = useState(false);
+  const [pokemonToEdit, setPokemonToEdit] = useState<Pokemon | null>(null);
+
+  function callDeletePokemonDialog(pokemon: Pokemon) {
+    setPokemonToDelete(pokemon);
+    setDeletePokemonDialogVisible(true);
+  }
+
+  function callEditPokemonModal(pokemon: Pokemon) {
+    setPokemonToEdit(pokemon);
+    setEditPokemonModalVisible(true);
+  }
 
   return (
     <SafeAreaView className='flex flex-col items-center justify-center flex-1 px-4 pt-8'>
@@ -29,7 +43,7 @@ export default function MyPkmList() {
       <View>
         <TouchableOpacity
           className='flex items-center justify-center w-full h-20 mb-2 bg-red-900'
-          onPress={() => setModalVisible(true)}
+          onPress={() => setAddPokemonModalVisible(true)}
         >
           <Text>
             Adicionar um Pokémon
@@ -38,14 +52,28 @@ export default function MyPkmList() {
       </View>
 
       <AddPokemonModal
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
+        modalVisible={addPokemonModalVisible}
+        setModalVisible={setAddPokemonModalVisible}
         setIsListUpdated={setIsListUpdated}
+      />
+
+      <DeletePokemonDialog
+        dialogVisible={deletePokemonDialogVisible}
+        setDialogVisible={setDeletePokemonDialogVisible}
+        pokemonToDelete={pokemonToDelete}
+      />
+
+      <EditPokemonModal
+        modalVisible={editPokemonModalVisible}
+        setModalVisible={setEditPokemonModalVisible}
+        pokemonToEdit={pokemonToEdit}
       />
 
       <PokemonsList
         isListUpdated={isListUpdated}
         setIsListUpdated={setIsListUpdated}
+        callDeletePokemonDialog={callDeletePokemonDialog}
+        callEditPokemonModal={callEditPokemonModal}
       />
     </SafeAreaView>
   )
@@ -159,9 +187,84 @@ function AddPokemonModal(props: AddPokemonModalProps) {
   );
 }
 
+type DeletePokemonDialogProps = {
+  dialogVisible: boolean;
+  setDialogVisible: (value: boolean) => void;
+  pokemonToDelete: Pokemon | null;
+}
+
+function DeletePokemonDialog(props: DeletePokemonDialogProps) {
+  return (
+    <Modal
+      visible={props.dialogVisible}
+      animationType='slide'
+      onRequestClose={() => { }}
+    >
+      <View className='flex flex-col items-start justify-start w-full h-full p-4 bg-blue-900'>
+        <Text className='mb-2 text-2xl font-bold'>
+          Deletar um Pokémon
+        </Text>
+        <Text className='mb-4 text-base text-black'>
+          Tem certeza que deseja deletar este pokémon?
+        </Text>
+        <View className='flex flex-row items-center justify-center w-full'>
+          <TouchableOpacity
+            className='flex items-center justify-center p-2 bg-red-900'
+          >
+            <Check color="white" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            className='flex items-center justify-center p-2 bg-green-900'
+            onPress={() => { props.setDialogVisible(false) }}
+          >
+            <X color="white" />
+          </TouchableOpacity>
+        </View>
+      </View>
+    </Modal>
+  );
+}
+
+type EditPokemonModalProps = {
+  modalVisible: boolean;
+  setModalVisible: (value: boolean) => void;
+  pokemonToEdit: Pokemon | null;
+}
+
+function EditPokemonModal(props: EditPokemonModalProps) {
+  return (
+    <Modal
+      visible={props.modalVisible}
+      animationType='slide'
+      onRequestClose={() => { }}
+    >
+      <View className='flex flex-col items-start justify-start w-full h-full p-4 bg-blue-900'>
+        <Text className='mb-2 text-2xl font-bold'>
+          Editar Pokémon
+        </Text>
+        <View className='flex flex-row items-center justify-center w-full'>
+          <TouchableOpacity
+            className='flex items-center justify-center p-2 bg-red-900'
+          >
+            <Check color="white" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            className='flex items-center justify-center p-2 bg-green-900'
+            onPress={() => { props.setModalVisible(false) }}
+          >
+            <X color="white" />
+          </TouchableOpacity>
+        </View>
+      </View>
+    </Modal>
+  );
+}
+
 type PokemonsListProps = {
   isListUpdated: boolean;
   setIsListUpdated: (value: boolean) => void;
+  callEditPokemonModal: (pokemon: Pokemon) => void;
+  callDeletePokemonDialog: (pokemon: Pokemon) => void;
 }
 
 function PokemonsList(props: PokemonsListProps) {
@@ -200,7 +303,13 @@ function PokemonsList(props: PokemonsListProps) {
       <FlatList
         className='w-full h-full'
         data={pokemons}
-        renderItem={(item) => <PokemonCard pokemon={item.item} />}
+        renderItem={(item) => (
+          <PokemonCard
+            callEditModal={props.callEditPokemonModal}
+            callDeleteDialog={props.callDeletePokemonDialog}
+            pokemon={item.item}
+          />
+        )}
       />
     </View>
   );
@@ -208,21 +317,30 @@ function PokemonsList(props: PokemonsListProps) {
 
 type PokemonCardProps = {
   pokemon: Pokemon;
+  callEditModal: (pokemon: Pokemon) => void;
+  callDeleteDialog: (pokemon: Pokemon) => void;
 }
 
 function PokemonCard(props: PokemonCardProps) {
   return (
     <View className='flex flex-row items-center justify-center w-full h-20 mb-2'>
-      <View className='flex items-start justify-start w-5/6 h-full'>
+      <View className='flex items-start justify-start w-3/4 h-full'>
         <Text className='text-2xl font-bold text-neutral-900'>
           {props.pokemon.name}
         </Text>
       </View>
-      <View className='flex items-center justify-center w-1/6 h-full'>
+      <View className='flex flex-row items-center justify-center w-1/4 h-full'>
         <TouchableOpacity
-          className='flex items-center justify-center p-2 bg-red-300 rounded-lg'
+          className='flex items-center justify-center p-2 bg-red-400 rounded-lg'
+          onPress={() => props.callDeleteDialog(props.pokemon)}
         >
           <Trash color="white" />
+        </TouchableOpacity>
+        <TouchableOpacity
+          className='flex items-center justify-center p-2 ml-2 bg-blue-400 rounded-lg'
+          onPress={() => props.callEditModal(props.pokemon)}
+        >
+          <Pen color="white" />
         </TouchableOpacity>
       </View>
     </View>
