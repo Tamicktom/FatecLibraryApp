@@ -29,6 +29,7 @@ module.exports = function (api) {
             "@services": "./src/services",
             "@store": "./src/store",
             "@models": "./src/models",
+            "@utils": "./src/utils",
           }
         }
       ]

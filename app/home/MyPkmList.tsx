@@ -2,97 +2,50 @@
 import { useState, useEffect } from 'react';
 import { Text, SafeAreaView, TextInput, TouchableOpacity, Keyboard, View, Modal, FlatList } from 'react-native';
 import firebase from '@services/connectionFirebase';
+import { useRouter } from 'expo-router';
+import { Trash } from "phosphor-react-native";
 
-//* Hook import
-import useWindowSize from '@hooks/common/useWindowSize';
+//* Utils imports
+import uuid from '@utils/uuid';
 
 type Pokemon = {
   name: string;
-  image: string | null;
   type: string;
   number: number;
 }
 
 export default function MyPkmList() {
+  const router = useRouter();
+  const [isListUpdated, setIsListUpdated] = useState(false);
   const [modalVisible, setModalVisible] = useState(true);
-  const [pokemonToAdd, setPokemonToAdd] = useState<Pokemon>({
-    name: '',
-    number: 0,
-    type: '',
-    image: null,
-  });
-
-  const { width, height } = useWindowSize();
-
-  console.log(width, height);
-
-  function clearPokemon() {
-    setPokemonToAdd({
-      name: '',
-      number: 0,
-      type: '',
-      image: null,
-    });
-  }
-
-  // async function insertUpdate() {
-  //   //editar dados
-  //   if (name !== '' && brand !== '' && price !== '' && color !== '' && image !== '' && key !== '') {
-  //     firebase.database().ref('pokemons').child(key).update({
-  //       name,
-  //       brand,
-  //       image,
-  //       price,
-  //       color
-  //     });
-
-  //     Keyboard.dismiss();
-  //     alert('Produto Editado!');
-  //     clearProduct();
-  //     setKey('');
-  //     return;
-  //   }
-
-  //   //cadastrar dados
-  //   let produtos = await firebase.database().ref('bikes');
-  //   let chave = produtos.push().key;
-
-  //   produtos.child(chave).set({
-  //     name,
-  //     brand,
-  //     image,
-  //     price,
-  //     color
-  //   });
-
-  //   alert('Produto Cadastrado!');
-  //   clearProduct();
-  //   clearData();
-  // }
-
-  async function handleAddPokemon() {
-    //verify if the fields are empty
-    if (pokemonToAdd.name === '' || pokemonToAdd.number === 0 || pokemonToAdd.type === '') return alert('Preencha todos os campos!');
-    //verify if the image is empty
-    if (pokemonToAdd.image === null) return alert('Selecione uma imagem!');
-
-  }
 
   return (
     <SafeAreaView className='flex flex-col items-center justify-center flex-1 px-4 pt-8'>
 
+      <Text>
+        Meus Pokémons
+      </Text>
+
+      <View>
+        <TouchableOpacity
+          className='flex items-center justify-center w-full h-20 mb-2 bg-red-900'
+          onPress={() => setModalVisible(true)}
+        >
+          <Text>
+            Adicionar um Pokémon
+          </Text>
+        </TouchableOpacity>
+      </View>
+
       <AddPokemonModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
+        setIsListUpdated={setIsListUpdated}
       />
 
       <PokemonsList
-        pokemons={[{
-          name: 'Bulbasaur',
-          image: null,
-          type: 'Grass',
-          number: 1,
-        }]}
+        isListUpdated={isListUpdated}
+        setIsListUpdated={setIsListUpdated}
       />
     </SafeAreaView>
   )
@@ -101,9 +54,53 @@ export default function MyPkmList() {
 type AddPokemonModalProps = {
   modalVisible: boolean;
   setModalVisible: (value: boolean) => void;
+  setIsListUpdated: (value: boolean) => void;
 }
 
 function AddPokemonModal(props: AddPokemonModalProps) {
+  const router = useRouter();
+  const [pokemonToAdd, setPokemonToAdd] = useState<Pokemon>({
+    name: '', type: '', number: 0
+  });
+
+  async function addPokemon() {
+    //editar dados
+    if (pokemonToAdd.name !== '' && pokemonToAdd.number !== 0 && pokemonToAdd.type !== '') {
+
+      //first, grab the user id
+      const userId = firebase.auth().currentUser?.uid;
+      if (!userId) return router.push('/'); //if the user is not logged in, redirect to the login page
+
+      //verify if the user already has it's own list
+      const userRef = firebase.database().ref('personal-pokemons').child(userId);
+
+      //if not, create a new one
+      const userRefSnapshot = await userRef.once('value');
+
+      //if the user doesn't have a list, create a new one and add the pokemon to it
+      if (!userRefSnapshot.exists()) {
+        //crete the "pokemons" list
+        const pokemonsList = await userRef.child('pokemons').push();
+        //add the pokemon to the list
+        await pokemonsList.set({
+          name: pokemonToAdd.name,
+          number: pokemonToAdd.number,
+          type: pokemonToAdd.type
+        });
+      } else {
+        //if the user already has a list, add the pokemon to the end of the array
+        await userRef.child('pokemons').push({
+          name: pokemonToAdd.name,
+          number: pokemonToAdd.number,
+          type: pokemonToAdd.type
+        });
+      }
+      Keyboard.dismiss();
+      props.setIsListUpdated(false);
+      return alert('Pokémon cadastrado com sucesso!');
+    }
+  }
+
   return (
     <Modal
       visible={props.modalVisible}
@@ -122,21 +119,25 @@ function AddPokemonModal(props: AddPokemonModalProps) {
         <TextInput
           className='w-full px-4 py-2 mb-2 text-xl rounded-lg bg-slate-200'
           placeholder='Nome'
+          onChangeText={(text) => setPokemonToAdd({ ...pokemonToAdd, name: text })}
         />
 
         <TextInput
           className='w-full px-4 py-2 mb-2 text-xl rounded-lg bg-slate-200'
           placeholder='Number'
           keyboardType='number-pad'
+          onChangeText={(text) => setPokemonToAdd({ ...pokemonToAdd, number: parseInt(text) })}
         />
 
         <TextInput
           className='w-full px-4 py-2 mb-2 text-xl rounded-lg bg-slate-200'
           placeholder="Type"
+          onChangeText={(text) => setPokemonToAdd({ ...pokemonToAdd, type: text })}
         />
 
         <TouchableOpacity
           className='w-full px-4 py-2 mb-2 bg-green-800 rounded-lg'
+          onPress={() => addPokemon()}
         >
           <Text className='text-2xl font-bold text-center text-white'>
             Adicionar
@@ -159,15 +160,46 @@ function AddPokemonModal(props: AddPokemonModalProps) {
 }
 
 type PokemonsListProps = {
-  pokemons: Pokemon[];
+  isListUpdated: boolean;
+  setIsListUpdated: (value: boolean) => void;
 }
 
 function PokemonsList(props: PokemonsListProps) {
+  const router = useRouter();
+  const [pokemons, setPokemons] = useState<Pokemon[]>([]);
+
+  async function getPokemons() {
+    //first, grab the user id
+    const userId = firebase.auth().currentUser?.uid;
+    if (!userId) return router.push('/'); //if the user is not logged in, redirect to the login page
+
+    //verify if the user already has it's own list
+    const userRef = firebase.database().ref('personal-pokemons').child(userId);
+
+    //if has, get the pokemons list
+    if ((await userRef.once('value')).exists()) {
+      const pokemonsList = await userRef.child('pokemons').once('value');
+      const pokemonsListValue = pokemonsList.val();
+      if (pokemonsListValue) {
+        const pokemonsListArray = Object.values(pokemonsListValue);
+        console.log(pokemonsListArray);
+        setPokemons(pokemonsListArray as Pokemon[]);
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (!props.isListUpdated) {
+      getPokemons();
+      props.setIsListUpdated(true);
+    }
+  }, [props.isListUpdated]);
+
   return (
-    <View className='relative flex flex-col items-center justify-start flex-1 w-full h-full m-0 bg-cyan-900'>
+    <View className='relative flex flex-col items-center justify-start flex-1 w-full h-full m-0'>
       <FlatList
         className='w-full h-full'
-        data={props.pokemons}
+        data={pokemons}
         renderItem={(item) => <PokemonCard pokemon={item.item} />}
       />
     </View>
@@ -180,10 +212,19 @@ type PokemonCardProps = {
 
 function PokemonCard(props: PokemonCardProps) {
   return (
-    <View className='flex items-center justify-center w-full h-20 mb-2 bg-red-900'>
-      <Text>
-        {props.pokemon.name}
-      </Text>
+    <View className='flex flex-row items-center justify-center w-full h-20 mb-2'>
+      <View className='flex items-start justify-start w-5/6 h-full'>
+        <Text className='text-2xl font-bold text-neutral-900'>
+          {props.pokemon.name}
+        </Text>
+      </View>
+      <View className='flex items-center justify-center w-1/6 h-full'>
+        <TouchableOpacity
+          className='flex items-center justify-center p-2 bg-red-300 rounded-lg'
+        >
+          <Trash color="white" />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
