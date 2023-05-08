@@ -68,6 +68,7 @@ export default function MyPkmList() {
         modalVisible={editPokemonModalVisible}
         setModalVisible={setEditPokemonModalVisible}
         pokemonToEdit={pokemonToEdit}
+        setIsListUpdated={setIsListUpdated}
       />
 
       <PokemonsList
