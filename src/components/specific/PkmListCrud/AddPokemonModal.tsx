@@ -4,6 +4,9 @@ import { Modal, Text, TextInput, TouchableOpacity, View, Keyboard } from 'react-
 import { useRouter } from 'expo-router';
 import firebase from '@services/connectionFirebase';
 
+//* Utils imports
+import uuid from '@utils/uuid';
+
 //* Types imports
 import type { Pokemon } from '@localTypes/Firebase';
 
@@ -16,7 +19,7 @@ type AddPokemonModalProps = {
 export default function AddPokemonModal(props: AddPokemonModalProps) {
   const router = useRouter();
   const [pokemonToAdd, setPokemonToAdd] = useState<Pokemon>({
-    name: '', type: '', number: 0
+    name: '', type: '', number: 0, id: uuid()
   });
 
   async function addPokemon() {
@@ -39,6 +42,7 @@ export default function AddPokemonModal(props: AddPokemonModalProps) {
         const pokemonsList = await userRef.child('pokemons').push();
         //add the pokemon to the list
         await pokemonsList.set({
+          id: pokemonToAdd.id,
           name: pokemonToAdd.name,
           number: pokemonToAdd.number,
           type: pokemonToAdd.type
@@ -46,6 +50,7 @@ export default function AddPokemonModal(props: AddPokemonModalProps) {
       } else {
         //if the user already has a list, add the pokemon to the end of the array
         await userRef.child('pokemons').push({
+          id: pokemonToAdd.id,
           name: pokemonToAdd.name,
           number: pokemonToAdd.number,
           type: pokemonToAdd.type
@@ -53,6 +58,8 @@ export default function AddPokemonModal(props: AddPokemonModalProps) {
       }
       Keyboard.dismiss();
       props.setIsListUpdated(false);
+      setPokemonToAdd({ name: '', type: '', number: 0, id: uuid() });
+      props.setModalVisible(false);
       return alert('Pokémon cadastrado com sucesso!');
     }
   }

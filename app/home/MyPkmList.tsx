@@ -61,6 +61,7 @@ export default function MyPkmList() {
         dialogVisible={deletePokemonDialogVisible}
         setDialogVisible={setDeletePokemonDialogVisible}
         pokemonToDelete={pokemonToDelete}
+        setIsListUpdated={setIsListUpdated}
       />
 
       <EditPokemonModal
