@@ -1,7 +1,6 @@
 //* Libraries imports
 import { useState } from 'react';
-import { SafeAreaView, TouchableOpacity } from 'react-native';
-import { Plus } from 'phosphor-react-native';
+import { SafeAreaView } from 'react-native';
 
 //* Components imports
 import DeletePokemonDialog from '@components/specific/PkmListCrud/DeletePokemonDialog';
@@ -17,8 +16,8 @@ export default function MyPkmList() {
   const [isListUpdated, setIsListUpdated] = useState(false);
   const [addPokemonModalVisible, setAddPokemonModalVisible] = useState(true);
   const [deletePokemonDialogVisible, setDeletePokemonDialogVisible] = useState(false);
-  const [pokemonToDelete, setPokemonToDelete] = useState<Pokemon | null>(null);
   const [editPokemonModalVisible, setEditPokemonModalVisible] = useState(false);
+  const [pokemonToDelete, setPokemonToDelete] = useState<Pokemon | null>(null);
   const [pokemonToEdit, setPokemonToEdit] = useState<Pokemon | null>(null);
 
   const callDeletePokemonDialog = (pokemon: Pokemon) => {
@@ -32,7 +31,9 @@ export default function MyPkmList() {
   }
 
   return (
-    <SafeAreaView className='relative flex flex-col items-center justify-center flex-1 px-4 pt-8 bg-neutral-100'>
+    <SafeAreaView
+      className='relative flex flex-col items-center justify-center flex-1 px-4 pt-8 bg-neutral-100'
+    >
 
       <PlusButton onPress={() => setAddPokemonModalVisible(true)} />
 
