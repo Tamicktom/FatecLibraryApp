@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useRouter } from 'expo-router';
 
 //* Components imports
-import StyledInput from '../src/components/common/StyledInput/StyledInput';
+import StyledInput from '../src/components/common/StyledInput/InputOne';
 
 //* Utils imports
 import firebase from "@services/connectionFirebase";

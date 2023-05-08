@@ -1,13 +1,20 @@
 //* Libraries imports
 import { useState, useEffect } from 'react';
-import { Modal, View, Text, TouchableOpacity, TextInput } from 'react-native';
+import { Modal, View, Text, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
+import colors from "tailwindcss/colors";
+
+//* Components imports
+import InputTwo from '@components/common/StyledInput/InputTwo';
 
 //* Utils imports
 import firebase from '@services/connectionFirebase';
 
 //* Types imports
 import type { Pokemon } from "@localTypes/Firebase";
+
+//* Hooks
+import useWindowSize from '@hooks/common/useWindowSize';
 
 type EditPokemonModalProps = {
   modalVisible: boolean;
@@ -21,6 +28,8 @@ export default function EditPokemonModal(props: EditPokemonModalProps) {
   const [pokemonToEdit, setPokemonToEdit] = useState<Pokemon>({
     id: '', name: '', type: '', number: 0
   });
+
+  const windowSize = useWindowSize();
 
   async function editPokemon() {
     if (props.pokemonToEdit) {
@@ -61,56 +70,60 @@ export default function EditPokemonModal(props: EditPokemonModalProps) {
       animationType='slide'
       onRequestClose={() => { }}
     >
-      <View className='flex flex-col items-start justify-start w-full h-full p-4 bg-blue-900'>
-        <Text className='mb-2 text-2xl font-bold'>
+      <View className='relative flex flex-col items-start justify-start w-full h-full p-4 bg-neutral-100'>
+        <Text className='mb-2 text-2xl font-bold text-neutral-900'>
           Editar Pokémon
         </Text>
 
-        <Text className='mb-4 text-base text-black'>
-          Edite um pokémon da sua lista pessoal
+        <Text className='mb-4 text-base text-neutral-700'>
+          Edite os dados do seu Pokémon
         </Text>
 
-        <TextInput
-          className='w-full px-4 py-2 mb-2 text-xl rounded-lg bg-slate-200'
-          placeholder='Nome'
+        <InputTwo
+          placeholder='Name'
           value={pokemonToEdit.name}
           onChangeText={(text) => setPokemonToEdit({ ...pokemonToEdit, name: text })}
         />
 
-        <TextInput
-          className='w-full px-4 py-2 mb-2 text-xl rounded-lg bg-slate-200'
+        <InputTwo
           placeholder='Number'
           keyboardType='number-pad'
           value={pokemonToEdit.number.toString()}
           onChangeText={(text) => setPokemonToEdit({ ...pokemonToEdit, number: parseInt(text) })}
         />
 
-        <TextInput
-          className='w-full px-4 py-2 mb-2 text-xl rounded-lg bg-slate-200'
-          placeholder="Type"
+        <InputTwo
+          placeholder='Type'
           value={pokemonToEdit.type}
           onChangeText={(text) => setPokemonToEdit({ ...pokemonToEdit, type: text })}
         />
 
-        <TouchableOpacity
-          className='w-full px-4 py-2 mb-2 bg-green-800 rounded-lg'
-          onPress={() => editPokemon()}
-        >
-          <Text className='text-2xl font-bold text-center text-white'>
-            Editar
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          className='w-full px-4 py-2 mb-2 bg-green-800 rounded-lg'
-          onPress={() => {
-            props.setModalVisible(false);
+        <View
+          className='absolute bottom-0 left-0 flex items-center justify-center p-4'
+          style={{
+            width: windowSize.width,
           }}
         >
-          <Text className='text-2xl font-bold text-center text-white'>
-            Fechar
-          </Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            className='w-full px-4 py-4 mb-2 bg-green-800 rounded-lg'
+            onPress={() => editPokemon()}
+          >
+            <Text className='text-2xl font-bold text-center uppercase text-neutral-100'>
+              Salvar alterações
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            className='w-full px-4 py-4 mb-2 border-2 border-red-800 rounded-lg'
+            onPress={() => {
+              props.setModalVisible(false);
+            }}
+          >
+            <Text className='text-2xl font-bold text-center text-red-800 uppercase'>
+              Fechar
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </Modal>
   );

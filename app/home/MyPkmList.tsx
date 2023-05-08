@@ -14,7 +14,7 @@ import type { Pokemon } from '@localTypes/Firebase';
 
 export default function MyPkmList() {
   const [isListUpdated, setIsListUpdated] = useState(false);
-  const [addPokemonModalVisible, setAddPokemonModalVisible] = useState(true);
+  const [addPokemonModalVisible, setAddPokemonModalVisible] = useState(false);
   const [deletePokemonDialogVisible, setDeletePokemonDialogVisible] = useState(false);
   const [editPokemonModalVisible, setEditPokemonModalVisible] = useState(false);
   const [pokemonToDelete, setPokemonToDelete] = useState<Pokemon | null>(null);
@@ -32,7 +32,7 @@ export default function MyPkmList() {
 
   return (
     <SafeAreaView
-      className='relative flex flex-col items-center justify-center flex-1 px-4 pt-8 bg-neutral-100'
+      className='relative flex flex-col items-center justify-center flex-1 pt-12 bg-neutral-100'
     >
 
       <PlusButton onPress={() => setAddPokemonModalVisible(true)} />

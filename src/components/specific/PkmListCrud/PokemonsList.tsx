@@ -71,7 +71,10 @@ export default function PokemonsList(props: PokemonsListProps) {
         isLoading
           ? <ActivityIndicator size='large' color='#F88' />
           : <FlatList
-            className='w-full h-full'
+            className='w-full h-full px-4'
+            contentContainerStyle={{
+              paddingBottom: 100,
+            }}
             data={pokemons}
             renderItem={(item) => (
               <PokemonCard

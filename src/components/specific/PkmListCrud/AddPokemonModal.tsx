@@ -1,14 +1,21 @@
 //* Libraries imports
 import { useState } from 'react';
-import { Modal, Text, TextInput, TouchableOpacity, View, Keyboard } from 'react-native';
+import { Modal, Text, TouchableOpacity, View, Keyboard } from 'react-native';
 import { useRouter } from 'expo-router';
 import firebase from '@services/connectionFirebase';
+import colors from "tailwindcss/colors";
+
+//* Components imports
+import InputTwo from '@components/common/StyledInput/InputTwo';
 
 //* Utils imports
 import uuid from '@utils/uuid';
 
 //* Types imports
 import type { Pokemon } from '@localTypes/Firebase';
+
+//* Hooks
+import useWindowSize from '@hooks/common/useWindowSize';
 
 type AddPokemonModalProps = {
   modalVisible: boolean;
@@ -21,6 +28,8 @@ export default function AddPokemonModal(props: AddPokemonModalProps) {
   const [pokemonToAdd, setPokemonToAdd] = useState<Pokemon>({
     name: '', type: '', number: 0, id: uuid()
   });
+
+  const windowSize = useWindowSize();
 
   async function addPokemon() {
     //editar dados
@@ -69,54 +78,61 @@ export default function AddPokemonModal(props: AddPokemonModalProps) {
       visible={props.modalVisible}
       animationType='slide'
       onRequestClose={() => { }}
+      transparent={true}
     >
-      <View className='flex flex-col items-start justify-start w-full h-full p-4 bg-blue-900'>
-        <Text className='mb-2 text-2xl font-bold'>
+      <View
+        className='relative flex flex-col items-start justify-start w-full h-full p-4 bg-neutral-100'
+      >
+        <Text className='mb-2 text-2xl font-bold text-neutral-900'>
           Adicionar um Pokémon
         </Text>
 
-        <Text className='mb-4 text-base text-black'>
+        <Text className='mb-4 text-base text-neutral-700'>
           Adicione um pokémon a sua lista pessoal
         </Text>
 
-        <TextInput
-          className='w-full px-4 py-2 mb-2 text-xl rounded-lg bg-slate-200'
-          placeholder='Nome'
+        <InputTwo
+          placeholder='Name'
           onChangeText={(text) => setPokemonToAdd({ ...pokemonToAdd, name: text })}
         />
 
-        <TextInput
-          className='w-full px-4 py-2 mb-2 text-xl rounded-lg bg-slate-200'
+        <InputTwo
           placeholder='Number'
           keyboardType='number-pad'
           onChangeText={(text) => setPokemonToAdd({ ...pokemonToAdd, number: parseInt(text) })}
         />
 
-        <TextInput
-          className='w-full px-4 py-2 mb-2 text-xl rounded-lg bg-slate-200'
-          placeholder="Type"
+        <InputTwo
+          placeholder='Type'
           onChangeText={(text) => setPokemonToAdd({ ...pokemonToAdd, type: text })}
         />
 
-        <TouchableOpacity
-          className='w-full px-4 py-2 mb-2 bg-green-800 rounded-lg'
-          onPress={() => addPokemon()}
-        >
-          <Text className='text-2xl font-bold text-center text-white'>
-            Adicionar
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          className='w-full px-4 py-2 mb-2 bg-green-800 rounded-lg'
-          onPress={() => {
-            props.setModalVisible(false);
+        <View
+          className='absolute bottom-0 left-0 flex items-center justify-center p-4'
+          style={{
+            width: windowSize.width,
           }}
         >
-          <Text className='text-2xl font-bold text-center text-white'>
-            Fechar
-          </Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            className='w-full px-4 py-4 mb-2 bg-green-800 rounded-lg'
+            onPress={() => addPokemon()}
+          >
+            <Text className='text-2xl font-bold text-center uppercase text-neutral-100'>
+              Adicionar
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            className='w-full px-4 py-4 mb-2 border-2 border-red-800 rounded-lg'
+            onPress={() => {
+              props.setModalVisible(false);
+            }}
+          >
+            <Text className='text-2xl font-bold text-center text-red-800 uppercase'>
+              Fechar
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </Modal>
   );

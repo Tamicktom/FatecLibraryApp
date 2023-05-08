@@ -2,6 +2,7 @@
 import { Check, X } from 'phosphor-react-native';
 import { View, Text, Modal, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
+import colors from "tailwindcss/colors";
 
 //* Utils imports
 import firebase from '@services/connectionFirebase';
@@ -49,29 +50,32 @@ export default function DeletePokemonDialog(props: DeletePokemonDialogProps) {
   return (
     <Modal
       visible={props.dialogVisible}
-      animationType='slide'
+      animationType='fade'
       onRequestClose={() => { }}
+      transparent={true}
     >
-      <View className='flex flex-col items-start justify-start w-full h-full p-4 bg-blue-900'>
-        <Text className='mb-2 text-2xl font-bold'>
-          Deletar um Pokémon
-        </Text>
-        <Text className='mb-4 text-base text-black'>
-          Tem certeza que deseja deletar este pokémon?
-        </Text>
-        <View className='flex flex-row items-center justify-center w-full'>
-          <TouchableOpacity
-            className='flex items-center justify-center p-2 bg-red-900'
-            onPress={() => { deletePokemon() }}
-          >
-            <Check color="white" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            className='flex items-center justify-center p-2 bg-green-900'
-            onPress={() => { props.setDialogVisible(false) }}
-          >
-            <X color="white" />
-          </TouchableOpacity>
+      <View className='flex flex-col items-center justify-center w-full h-full p-4'>
+        <View className='flex items-center justify-center w-full p-4 border-2 bg-neutral-100 rounded-2xl border-neutral-400'>
+          <Text className='mb-2 text-2xl font-bold text-neutral-900'>
+            Deletar um Pokémon
+          </Text>
+          <Text className='mb-4 text-lg text-neutral-700'>
+            Tem certeza que deseja deletar <Text className='font-bold'>{props.pokemonToDelete?.name}</Text>?
+          </Text>
+          <View className='flex flex-row items-center justify-center w-full'>
+            <TouchableOpacity
+              className='flex items-center justify-center p-2 border-2 border-green-400 rounded-2xl'
+              onPress={() => { deletePokemon() }}
+            >
+              <Check color={colors.green[400]} size={32} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              className='flex items-center justify-center p-2 ml-4 border-2 border-red-400 rounded-2xl'
+              onPress={() => { props.setDialogVisible(false) }}
+            >
+              <X color={colors.red[400]} size={32} />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </Modal>
