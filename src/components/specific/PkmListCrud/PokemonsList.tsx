@@ -1,6 +1,6 @@
 //* Libraries imports
 import { useEffect, useState } from 'react';
-import { View, FlatList } from 'react-native';
+import { View, FlatList, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
 
 //* Components imports
@@ -21,6 +21,7 @@ type PokemonsListProps = {
 
 export default function PokemonsList(props: PokemonsListProps) {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
 
   async function getPokemons() {
@@ -48,24 +49,39 @@ export default function PokemonsList(props: PokemonsListProps) {
 
   useEffect(() => {
     if (!props.isListUpdated) {
-      getPokemons();
-      props.setIsListUpdated(true);
+      setIsLoading(true);
+      getPokemons().finally(() => {
+        setIsLoading(false)
+        props.setIsListUpdated(true);
+      });
     }
   }, [props.isListUpdated]);
 
+  useEffect(() => {
+    setIsLoading(true);
+    getPokemons().finally(() => {
+      setIsLoading(false)
+      props.setIsListUpdated(true);
+    });
+  }, []);
+
   return (
     <View className='relative flex flex-col items-center justify-start flex-1 w-full h-full m-0'>
-      <FlatList
-        className='w-full h-full'
-        data={pokemons}
-        renderItem={(item) => (
-          <PokemonCard
-            callEditModal={props.callEditPokemonModal}
-            callDeleteDialog={props.callDeletePokemonDialog}
-            pokemon={item.item}
+      {
+        isLoading
+          ? <ActivityIndicator size='large' color='#F88' />
+          : <FlatList
+            className='w-full h-full'
+            data={pokemons}
+            renderItem={(item) => (
+              <PokemonCard
+                callEditModal={props.callEditPokemonModal}
+                callDeleteDialog={props.callDeletePokemonDialog}
+                pokemon={item.item}
+              />
+            )}
           />
-        )}
-      />
+      }
     </View>
   );
 }
