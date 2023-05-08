@@ -1,6 +1,6 @@
 import type { PkmType } from "@localTypes/Pokemon";
 
-type PkmTypeColor = {
+export type PkmTypeColor = {
   [key in PkmType]: {
     color: string;
     light: string;

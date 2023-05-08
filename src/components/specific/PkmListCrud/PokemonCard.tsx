@@ -6,7 +6,7 @@ import colors from "tailwindcss/colors";
 //* Types imports
 import type { Pokemon } from "@localTypes/Firebase";
 
-import pkmColors from "@styles/pkmTypeColors"
+import pkmColors, { type PkmTypeColor } from "@styles/pkmTypeColors"
 
 type PokemonCardProps = {
   pokemon: Pokemon;
@@ -18,7 +18,7 @@ export default function PokemonCard(props: PokemonCardProps) {
   return (
     <View
       className='flex flex-row items-center justify-center w-full h-20 mb-2 border-2 rounded-2xl border-neutral-300'
-      style={{ backgroundColor: pkmColors[props.pokemon.type]?.light || colors.neutral[100] }}
+      style={{ backgroundColor: pkmColors[props.pokemon.type as keyof PkmTypeColor]?.light || colors.neutral[100] }}
     >
       <View className='flex items-start justify-start w-4/6 h-full px-2 pt-1'>
         <Text className='text-2xl font-bold text-neutral-700'>
