@@ -38,9 +38,12 @@ export default function PokemonsList(props: PokemonsListProps) {
       if (pokemonsListValue) {
         const pokemonsListArray = Object.values(pokemonsListValue);
         console.log(pokemonsListArray);
-        setPokemons(pokemonsListArray as Pokemon[]);
+        return setPokemons(pokemonsListArray as Pokemon[]);
       }
     }
+
+    //if not, set the list to empty and return it
+    return setPokemons([]);
   }
 
   useEffect(() => {
