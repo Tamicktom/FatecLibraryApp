@@ -71,7 +71,8 @@ export default function Login(props: Props) {
 
   return (
     <SafeAreaView className="flex-1">
-      <View className='flex flex-col items-center justify-center flex-1 w-full h-full bg-black'>
+      <StatusBar style="auto" />
+      <View className='relative flex flex-col items-center justify-center flex-1 w-full h-full p-4 bg-neutral-100'>
         <StyledInput
           label="Insira seu email"
           setValue={(e) => { setUserCredentials({ ...userCredentials, email: e }) }}
@@ -81,19 +82,18 @@ export default function Login(props: Props) {
           setValue={(e) => { setUserCredentials({ ...userCredentials, password: e }) }}
           password
         />
-        <StatusBar style="auto" />
 
         <TouchableOpacity
-          className='flex items-center justify-center w-5/6 px-4 py-4 mt-4 bg-white rounded-2xl'
+          className='flex items-center justify-center w-full px-4 py-4 mt-4 bg-green-600 rounded-2xl'
           onPress={handleLogin}
         >
-          <Text>
+          <Text className='text-2xl font-bold text-white uppercase'>
             {type === "login" ? "Entrar" : "Cadastrar"}
           </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity>
-          <Text>
+        <TouchableOpacity className='absolute bottom-0 left-0 flex items-center justify-center w-full mb-4 ml-4'>
+          <Text className='text-lg'>
             Não tem uma conta? Cadastre-se
           </Text>
         </TouchableOpacity>

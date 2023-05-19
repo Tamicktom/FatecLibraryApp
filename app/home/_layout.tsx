@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Tabs } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useRouter } from 'expo-router';
-import { MagnifyingGlass, House, Heart } from "phosphor-react-native";
+import { MagnifyingGlass, House, Heart, ShoppingBag } from "phosphor-react-native";
 
 //* Store import
 import { userStore } from "@store/user";
@@ -45,20 +45,27 @@ export default function Layout() {
           name="MyPkmList"
           options={{
             ...options,
-            tabBarIcon: ({ focused }) => renderIcon(focused, "index")
+            tabBarIcon: ({ focused }) => renderIcon(focused, "MyPkmList")
           }} />
+        <Tabs.Screen
+          name="FavoritePokemons"
+          options={{
+            ...options,
+            tabBarIcon: ({ focused }) => renderIcon(focused, "FavoritePokemons")
+          }} />
+
         {/* <Tabs.Screen
           name="favorites"
           options={{
             ...options,
             tabBarIcon: () => <Heart />,
           }} /> */}
-        <Tabs.Screen
+        {/* <Tabs.Screen
           name="options"
           options={{
             ...options,
             tabBarIcon: ({ focused }) => renderIcon(focused, "options"),
-          }} />
+          }} /> */}
         {/* <Tabs.Screen
           name="GerenciarProdutos"
           options={{
@@ -70,7 +77,7 @@ export default function Layout() {
   );
 }
 
-type Routes = "pokedex" | "index" | "favorites" | "options" | "GerenciarProdutos" | "MyPkmList";
+type Routes = "pokedex" | "index" | "favorites" | "options" | "GerenciarProdutos" | "MyPkmList" | "FavoritePokemons" | "LegendaryPokemons" | "Movies";
 
 function renderIcon(focused: boolean, route: Routes) {
   switch (route) {
@@ -85,6 +92,10 @@ function renderIcon(focused: boolean, route: Routes) {
     case "GerenciarProdutos":
       return <Heart color={focused ? "black" : "gray"} />;
     case "MyPkmList":
+      return <ShoppingBag color={focused ? "black" : "gray"} />;
+    case "FavoritePokemons":
+      return <Heart color={focused ? "black" : "gray"} />;
+    case "Movies":
       return <Heart color={focused ? "black" : "gray"} />;
     default:
       return <Heart color={focused ? "black" : "gray"} />;
